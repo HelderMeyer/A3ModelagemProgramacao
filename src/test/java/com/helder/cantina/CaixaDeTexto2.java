@@ -18,20 +18,27 @@ import java.util.Arrays;
 public class CaixaDeTexto2 extends JFrame {
     private static final long serialVersionUID = 1L;
     private JTextField raNovo;
+    private JTextField nomeNovo; // Adicionando campo para o nome
     private JPasswordField senhaNova;
     private JButton cadastrar;
-    private JLabel user, pass;
+    private JLabel user, pass, userName;
 
     public CaixaDeTexto2() {
         super("Cantina Virtual - Tela de cadastro");
 
         setLayout(new FlowLayout());
 
-        user = new JLabel("Novo Usuário: ");
+        user = new JLabel("RA: ");
         add(user);
 
         raNovo = new JTextField(15);
         add(raNovo);
+
+        userName = new JLabel("Nome:"); // Label para o nome
+        add(userName);
+        
+        nomeNovo = new JTextField(15); // Caixa de texto para o nome
+        add(nomeNovo);
 
         pass = new JLabel("Nova Senha:   ");
         add(pass);
@@ -46,14 +53,16 @@ public class CaixaDeTexto2 extends JFrame {
             public void actionPerformed(ActionEvent evento) {
                 if (evento.getSource() == cadastrar) {
                     String ra = raNovo.getText();
+                    String nome = nomeNovo.getText(); // Obtendo o nome inserido
                     char[] passChars = senhaNova.getPassword();
                     String pass = new String(passChars);
 
                     try (Connection connection = DriverManager.getConnection("jdbc:sqlite:cantina.db")) {
-                        String query = "INSERT INTO student VALUES(?, ?)";
+                        String query = "INSERT INTO student VALUES(?, ?, ?)"; // Adicionando o campo do nome
                         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
                             pstmt.setString(1, ra);
                             pstmt.setString(2, pass);
+                            pstmt.setString(3, nome); // Inserindo o nome na query
                             pstmt.executeUpdate();
                         }
                     } catch (SQLException e) {
@@ -69,6 +78,7 @@ public class CaixaDeTexto2 extends JFrame {
         });
 
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        setSize(250, 150);
+        setSize(300, 150);
+        setVisible(true);
     }
 }

@@ -13,8 +13,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import javax.swing.JOptionPane;
 import java.util.Arrays;
+import javax.swing.JOptionPane;
 
 public class CaixaDeTexto extends JFrame {
     private static final long serialVersionUID = 1L;
@@ -53,15 +53,15 @@ public class CaixaDeTexto extends JFrame {
                     String pass = new String(passChars);
 
                     try (Connection connection = DriverManager.getConnection("jdbc:sqlite:cantina.db")) {
-                        String query = "SELECT aluno_senha FROM student WHERE aluno_RA = ?";
+                        String query = "SELECT aluno_senha, aluno_nome FROM student WHERE aluno_RA = ?";
                         try (PreparedStatement pstmt = connection.prepareStatement(query)) {
                             pstmt.setString(1, user);
                             ResultSet resultSet = pstmt.executeQuery();
-
                             if (resultSet.next()) {
                                 String retrievedPass = resultSet.getString("aluno_senha");
+                                String retrievedName = resultSet.getString("aluno_nome");
                                 if (pass.equals(retrievedPass)) {
-                                    JOptionPane.showMessageDialog(null, "Seja bem-vindo, USUÁRIO");
+                                    JOptionPane.showMessageDialog(null, "Seja bem-vindo, " + retrievedName);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Senha errada! Estude Java!");
                                 }
@@ -88,9 +88,7 @@ public class CaixaDeTexto extends JFrame {
             }
         });
 
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(250, 150);
-        setVisible(true);
+       
     }
 
     public static void main(String[] args) {

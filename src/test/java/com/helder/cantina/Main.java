@@ -7,7 +7,7 @@ public class Main {
 		CaixaDeTexto texfield = new CaixaDeTexto();
 
 		texfield.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		texfield.setSize(200, 200);
+		texfield.setSize(600, 150);
 		texfield.setVisible(true);
 	}
 
