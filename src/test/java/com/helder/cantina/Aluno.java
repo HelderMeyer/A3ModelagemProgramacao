@@ -1,53 +1,65 @@
 package com.helder.cantina;
 
 public class Aluno {
-	
-	private int raAluno;
-	private String senhaAluno;
-	private String nomeAluno;
-	private String cursoAluno;
-	private double saldoAluno;
-	
-	Aluno(int raAluno, String senhaAluno, String nomeAluno, String cursoAluno, double saldoAluno){
-		this.raAluno = raAluno;
-		this.senhaAluno = senhaAluno;
-		this.nomeAluno = nomeAluno;
-		this.cursoAluno = cursoAluno;
-		this.saldoAluno = saldoAluno;
+
+	private int alunoRa;
+	private String alunoNome;
+	private String alunoSenha;
+	private String alunoCurso;
+	private double alunoSaldo;
+	//private String alunoPedidos;
+
+	Aluno(int alunoRa, String alunoNome, String alunoSenha, String alunoCurso, double alunoSaldo) {
+		this.setAlunoRa(alunoRa);
+		this.setAlunoNome(alunoNome);
+		this.setAlunoSenha(alunoSenha);
+		this.setAlunoCurso(alunoCurso);
+		this.setAlunoSaldo(alunoSaldo);
+		this.createAluno();
 	}
-	
-	public int getRaAluno() {
-		return raAluno;
+
+	public int getAlunoRa() {
+		return alunoRa;
 	}
-	public void setRaAluno(int raAluno) {
-		this.raAluno = raAluno;
+
+	public void setAlunoRa(int alunoRa) {
+		this.alunoRa = alunoRa;
 	}
-	
-	public String getSenhaAluno() {
-		return senhaAluno;
+
+	public String getAlunoNome() {
+		return alunoNome;
 	}
-	public void setSenhaAluno(String senhaAluno) {
-		this.senhaAluno = senhaAluno;
+
+	public void setAlunoNome(String alunoNome) {
+		this.alunoNome = alunoNome;
 	}
-	
-	public String getNomeAluno() {
-		return nomeAluno;
+
+	public String getAlunoSenha() {
+		return alunoSenha;
 	}
-	public void setNomeAluno(String nomeAluno) {
-		this.nomeAluno = nomeAluno;
+
+	public void setAlunoSenha(String alunoSenha) {
+		this.alunoSenha = alunoSenha;
 	}
-	
-	public String getCursoAluno() {
-		return cursoAluno;
+
+	public String getAlunoCurso() {
+		return alunoCurso;
 	}
-	public void setCursoAluno(String cursoAluno) {
-		this.cursoAluno = cursoAluno;
+
+	public void setAlunoCurso(String alunoCurso) {
+		this.alunoCurso = alunoCurso;
 	}
-	
-	public double getSaldoAluno() {
-		return saldoAluno;
+
+	public double getAlunoSaldo() {
+		return alunoSaldo;
 	}
-	public void setSaldoAluno(double saldoAluno) {
-		this.saldoAluno = saldoAluno;
+
+	public void setAlunoSaldo(double alunoSaldo) {
+		this.alunoSaldo = alunoSaldo;
 	}
+
+	public void createAluno() {
+		Database.sqlCreate("INSERT INTO student VALUES (" + this.getAlunoRa() + ", '" + this.getAlunoNome() + "', '" + this.getAlunoSenha() + "', '" + this.getAlunoCurso() + "', " + this.getAlunoSaldo() + ")");
+	}
+
 }

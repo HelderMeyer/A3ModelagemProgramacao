@@ -1,48 +1,41 @@
 package com.helder.cantina;
 
-public class Lanche {
-	
-	private int idLanche;
-	private String nomeLanche;
-	private String descricaoLanche;
-	private double valorLanche;
-	
-	Lanche(int idLanche, String nomeLanche, String descricaoLanche, double valorLanche){
-		this.idLanche = idLanche;
-		this.nomeLanche = nomeLanche;
-		this.descricaoLanche = descricaoLanche;
-		this.valorLanche = valorLanche;
-	}
+public abstract class Lanche {
+    
+    private int ID;
+    private String nome;
+    private double valor;        
+    
+    public Lanche (int ID, String nome, double valor){
 
-	public int getIdLanche() {
-		return idLanche;
-	}
+        this.ID = ID;
+        this.nome = nome;
+        this.valor = valor;
 
-	public void setIdLanche(int idLanche) {
-		this.idLanche = idLanche;
-	}
+    }
 
-	public String getNomeLanche() {
-		return nomeLanche;
-	}
+    public int getID() {
+        return ID;
+    }
 
-	public void setNomeLanche(String nomeLanche) {
-		this.nomeLanche = nomeLanche;
-	}
+    public void setID(int ID) {
+        this.ID = ID;
+    }
 
-	public String getDescricaoLanche() {
-		return descricaoLanche;
-	}
+    public String getNome() {
+        return nome;
+    }
 
-	public void setDescricaoLanche(String descricaoLanche) {
-		this.descricaoLanche = descricaoLanche;
-	}
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
 
-	public double getValorLanche() {
-		return valorLanche;
-	}
+    public double getValor() {
+        return valor;
+    }
 
-	public void setValorLanche(double valorLanche) {
-		this.valorLanche = valorLanche;
-	}
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+
 }
