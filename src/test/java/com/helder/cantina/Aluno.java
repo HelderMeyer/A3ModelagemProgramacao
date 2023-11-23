@@ -15,7 +15,6 @@ public class Aluno {
 		this.setAlunoSenha(alunoSenha);
 		this.setAlunoCurso(alunoCurso);
 		this.setAlunoSaldo(alunoSaldo);
-		this.createAluno();
 	}
 
 	public int getAlunoRa() {
@@ -60,6 +59,30 @@ public class Aluno {
 
 	public void createAluno() {
 		Database.sqlCreate("INSERT INTO student VALUES (" + this.getAlunoRa() + ", '" + this.getAlunoNome() + "', '" + this.getAlunoSenha() + "', '" + this.getAlunoCurso() + "', " + this.getAlunoSaldo() + ")");
+	}
+	
+	public static String getAlunoNameByRA(int alunoRA) {
+		String resultado = null;
+		resultado = Database.sqlRead("SELECT * FROM student WHERE aluno_RA = " + alunoRA, "aluno_nome");
+		return resultado;
+	}
+	
+	public static String getAlunoCursoByRA(int alunoRA) {
+		String resultado = null;
+		resultado = Database.sqlRead("SELECT * FROM student WHERE aluno_RA = " + alunoRA, "aluno_curso");
+		return resultado;
+	}
+	
+	public static String getAlunoSaldoByRA(int alunoRA) {
+		String resultado = null;
+		resultado = Database.sqlRead("SELECT * FROM student WHERE aluno_RA = " + alunoRA, "aluno_saldo");
+		return resultado;
+	}
+	
+	public static String getAlunoSenhaByRA(int alunoRA) {
+		String resultado = null;
+		resultado = Database.sqlRead("SELECT * FROM student WHERE aluno_RA = " + alunoRA, "aluno_senha");
+		return resultado;
 	}
 
 }

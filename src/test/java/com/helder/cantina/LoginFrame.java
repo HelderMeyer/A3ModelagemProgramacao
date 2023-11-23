@@ -27,6 +27,7 @@ public class LoginFrame extends JFrame {
 	}
 
 	public LoginFrame() {
+		setTitle("Cantina Virtual - Tela de Login");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
 		contentPane = new JPanel();
@@ -100,6 +101,8 @@ public class LoginFrame extends JFrame {
 		        // Se contém letras, notifica o usuário
 		        JOptionPane.showMessageDialog(null, "O campo de usuário não pode conter letras!");
 		        return; // Encerra a execução do método
+		    }else if(usuarioString.trim().isEmpty()) {
+		    	JOptionPane.showMessageDialog(null, "O campo de usuário não pode conter espaços ou estar vazio!");
 		    }else {
 		    	int usuario = Integer.parseInt(usuarioString);
 		    	try {
@@ -130,7 +133,7 @@ public class LoginFrame extends JFrame {
 							String nomeDoAluno = rs.getString("aluno_nome");
 							JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeDoAluno);
 							this.dispose();
-							PedidosTela.rodar(usuario); // LEVAR PARA A OUTRA TELA
+							PedidosFrame.executar(usuario); // LEVAR PARA A OUTRA TELA
 						}
 					}
 				} catch (SQLException ex) {
@@ -146,6 +149,23 @@ public class LoginFrame extends JFrame {
 				}
 		    }
 		});
+		
+		btnCadastrar.addActionListener(e -> {
+			CadastroFrame.main(null);
+		});
+		
+		JMenuBar menuBar = new JMenuBar();
+        setJMenuBar(menuBar);
+
+        JMenu menuOpcoes = new JMenu("Opções");
+        menuBar.add(menuOpcoes);
+
+        JMenuItem menuItemSair = new JMenuItem("Sair");
+        menuOpcoes.add(menuItemSair);
+        menuItemSair.addActionListener(e -> {
+            // Adicione aqui a lógica para sair do sistema
+        	System.exit(0);
+        });
 
 	}
 }
