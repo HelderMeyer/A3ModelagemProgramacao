@@ -7,7 +7,6 @@ public class Aluno {
 	private String alunoSenha;
 	private String alunoCurso;
 	private double alunoSaldo;
-	//private String alunoPedidos;
 
 	Aluno(int alunoRa, String alunoNome, String alunoSenha, String alunoCurso, double alunoSaldo) {
 		this.setAlunoRa(alunoRa);
@@ -83,6 +82,23 @@ public class Aluno {
 		String resultado = null;
 		resultado = Database.sqlRead("SELECT * FROM student WHERE aluno_RA = " + alunoRA, "aluno_senha");
 		return resultado;
+	}
+	
+	public static int getAlunoRaByRA(int alunoRA) {
+	    String resultado = Database.sqlRead("SELECT * FROM student WHERE aluno_RA = " + alunoRA, "aluno_RA");
+	    // Verifica se o resultado não é nulo e não está vazio
+	    if (resultado != null && !resultado.isEmpty()) {
+	        // Tenta converter a string para inteiro
+	        try {
+	            return Integer.parseInt(resultado);
+	        } catch (NumberFormatException e) {
+	            // Em caso de erro na conversão, pode tratar aqui
+	            // Por exemplo, lançar uma exceção ou retornar um valor padrão
+	            e.printStackTrace();
+	        }
+	    }
+	    // Retorna um valor padrão se não foi possível converter para inteiro
+	    return -1; // Pode retornar outro valor se for mais apropriado
 	}
 
 }

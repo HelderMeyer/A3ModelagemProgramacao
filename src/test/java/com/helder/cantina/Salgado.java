@@ -1,10 +1,9 @@
 package com.helder.cantina;
 
-public class Salgado extends Lanche{
+public class Salgado{
     private String igredientes;
 
     public Salgado(int ID, String nome, double valor, String igredientes){
-        super(ID, nome, valor);
         this.igredientes = igredientes;
     }
 

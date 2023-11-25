@@ -117,13 +117,20 @@ public class CadastroFrame extends JFrame {
             } else if (usuarioString.isEmpty() || nome.isEmpty() || curso.isEmpty() || senha.isEmpty()) {
                 JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos!");
             } else {
-            	int usuario = Integer.parseInt(usuarioString);
-            	Aluno aluno = new Aluno(usuario, nome, senha, curso, 0);
-            	aluno.createAluno();
-                JOptionPane.showMessageDialog(null, "O usuário " + Aluno.getAlunoNameByRA(usuario) + " cadastrado com sucesso!");
-                dispose();
+                int usuario = Integer.parseInt(usuarioString);
+                // Verifica se o usuário já existe no banco de dados
+                if (usuario == Aluno.getAlunoRaByRA(usuario)) {
+                    JOptionPane.showMessageDialog(null, "Esse usuário já cadastrado!");
+                } else {
+                    // O usuário não existe, então podemos cadastrar
+                    Aluno aluno = new Aluno(usuario, nome, senha, curso, 0);
+                    aluno.createAluno();
+                    JOptionPane.showMessageDialog(null, "Usuário " + Aluno.getAlunoNameByRA(usuario) + " cadastrado com sucesso!");
+                    dispose();
+                }
             }
         });
+
 
         setLocationRelativeTo(null); // Centraliza a janela na tela
     }

@@ -15,6 +15,7 @@ public class NewPedidosFrame extends JFrame {
     private JPanel contentPane;
     private static int userId;
     private JLabel lblTotal;
+    private double precoTotal;
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
@@ -58,9 +59,11 @@ public class NewPedidosFrame extends JFrame {
                     stringValue = stringValue.substring(2); // Removendo o "R$" para poder converter para double
                     stringValue = stringValue.replace(",", "."); // Ajustando a vírgula para ponto como separador decimal
                     total += Double.parseDouble(stringValue);
+                    precoTotal = total;
                 }
             }
         }
+        
         lblTotal.setText("Total = R$" + String.format("%.2f", total)); // Exibindo o total formatado na label
     }
     
@@ -95,6 +98,10 @@ public class NewPedidosFrame extends JFrame {
         }
 
         // Após atualizar o banco de dados, você pode limpar a tabela de lanches
+        String saldoString = Database.sqlRead("SELECT * FROM student WHERE aluno_RA = " + userId, "aluno_saldo");
+        double saldoDouble = Double.parseDouble(saldoString);
+        double novoSaldo = saldoDouble - precoTotal;
+        Database.sqlUpdate("UPDATE student SET aluno_saldo = " + novoSaldo + " WHERE aluno_RA = " + userId);
         tableModel.setRowCount(0);
         this.lblTotal.setText("Total = R$0.00"); // Atualizar o total para zero
     }
@@ -228,12 +235,28 @@ public class NewPedidosFrame extends JFrame {
         btnFinalizarCompra.addActionListener(e -> {
             DefaultTableModel tableModel = (DefaultTableModel) tabela.getModel();
             if (tableModel.getRowCount() > 0) {
-                updateDatabase(tableModel); // Passando lblTotal como parâmetro para a função
-                JOptionPane.showMessageDialog(null, "Compra finalizada. Banco de dados atualizado!");
+                // Calculando o valor total da compra
+                double totalCompra = precoTotal;
+                
+                // Obtendo o saldo disponível do usuário
+                String saldoString = Database.sqlRead("SELECT * FROM student WHERE aluno_RA = " + userId, "aluno_saldo");
+                double saldoDisponivel = Double.parseDouble(saldoString);
+                
+                // Verificando se o usuário possui saldo suficiente para a compra
+                if (totalCompra > saldoDisponivel) {
+                    JOptionPane.showMessageDialog(null, "Saldo insuficiente para realizar a compra.");
+                } else {
+                    // O usuário possui saldo suficiente, então podemos prosseguir com a atualização do banco de dados
+                    updateDatabase(tableModel); // Passando lblTotal como parâmetro para a função
+                    JOptionPane.showMessageDialog(null, "Compra finalizada. Banco de dados atualizado!");
+                    this.dispose();
+                    PedidosFrame.atualizarSaldo();
+                }
             } else {
                 JOptionPane.showMessageDialog(null, "Adicione itens à tabela antes de finalizar a compra.");
             }
         });
+
 
     }
 }

@@ -1,5 +1,5 @@
 package com.helder.cantina;
 
-public class Vendedor {
+public class Funcionario {
 
 }
