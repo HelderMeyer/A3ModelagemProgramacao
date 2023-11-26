@@ -73,11 +73,15 @@ public class MenuFuncionariosFrame extends JFrame {
         btnProdutos.addActionListener(e -> {
         	AdminFrame.executar(funcionarioId);
         });
-
+        
         JButton btnUsuarios = new JButton("Usuários");
         btnUsuarios.setFont(new Font("Arial", Font.PLAIN, 12));
         btnUsuarios.setBounds(156, 150, 117, 29);
         contentPane.add(btnUsuarios);
+        
+        btnUsuarios.addActionListener(e -> {
+        	ConsultaUsuariosFrame.executar(funcionarioId);
+        });
         
         JMenuBar menuBar = new JMenuBar();
         setJMenuBar(menuBar);
