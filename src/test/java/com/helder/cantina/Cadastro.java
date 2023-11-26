@@ -11,7 +11,7 @@ public class Cadastro {
 		String cursoAluno = JOptionPane.showInputDialog("Digite o curso do aluno: ");
 		String senhaAluno = JOptionPane.showInputDialog("Digite o senha do aluno: ");
 		Aluno aluno = new Aluno(raAluno, nomeAluno, senhaAluno, cursoAluno, 0);
-		aluno.createAluno();
+		aluno.criarUsuario();
 		System.out.println("Aluno cadastrado com sucesso!");
 	}
 

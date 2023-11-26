@@ -120,11 +120,11 @@ public class CadastroFrame extends JFrame {
                 int usuario = Integer.parseInt(usuarioString);
                 // Verifica se o usuário já existe no banco de dados
                 if (usuario == Aluno.getAlunoRaByRA(usuario)) {
-                    JOptionPane.showMessageDialog(null, "Esse usuário já cadastrado!");
+                    JOptionPane.showMessageDialog(null, "Esse usuário já foi cadastrado!");
                 } else {
                     // O usuário não existe, então podemos cadastrar
                     Aluno aluno = new Aluno(usuario, nome, senha, curso, 0);
-                    aluno.createAluno();
+                    aluno.criarUsuario();
                     JOptionPane.showMessageDialog(null, "Usuário " + Aluno.getAlunoNameByRA(usuario) + " cadastrado com sucesso!");
                     dispose();
                 }

@@ -8,7 +8,7 @@ import java.sql.*;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.LayoutStyle.ComponentPlacement;
 
-public class LoginFrame extends JFrame {
+public class FuncionariosFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -18,7 +18,7 @@ public class LoginFrame extends JFrame {
 	public static void main(String[] args) {
 		EventQueue.invokeLater(() -> {
 			try {
-				LoginFrame frame = new LoginFrame();
+				FuncionariosFrame frame = new FuncionariosFrame();
 				frame.setVisible(true);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -26,8 +26,8 @@ public class LoginFrame extends JFrame {
 		});
 	}
 
-	public LoginFrame() {
-		setTitle("Cantina Virtual - Tela de Login");
+	public FuncionariosFrame() {
+		setTitle("Portal dos Funcionários");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 500, 400);
 		contentPane = new JPanel();
@@ -35,7 +35,7 @@ public class LoginFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 
-		JLabel usuarioLabel = new JLabel("Usuário (RA)");
+		JLabel usuarioLabel = new JLabel("Usuário do Funcionário");
 		usuarioLabel.setFont(new Font("Arial", Font.PLAIN, 20));
 
 		JButton logarButton = new JButton("Logar");
@@ -99,10 +99,10 @@ public class LoginFrame extends JFrame {
 			
 			if (usuarioString.matches(".*[a-zA-Z].*")) {
 		        // Se contém letras, notifica o usuário
-		        JOptionPane.showMessageDialog(null, "O campo de usuário não pode conter letras!");
+		        JOptionPane.showMessageDialog(null, "O campo de funcionário não pode conter letras!");
 		        return; // Encerra a execução do método
 		    }else if(usuarioString.trim().isEmpty()) {
-		    	JOptionPane.showMessageDialog(null, "O campo de usuário não pode conter espaços ou estar vazio!");
+		    	JOptionPane.showMessageDialog(null, "O campo de funcionário não pode conter espaços ou estar vazio!");
 		    }else {
 		    	int usuario = Integer.parseInt(usuarioString);
 		    	try {
@@ -113,7 +113,7 @@ public class LoginFrame extends JFrame {
 
 					// Consulta se o usuário existe no banco de dados
 					ResultSet rs = statement
-							.executeQuery("SELECT aluno_nome, aluno_senha FROM student WHERE aluno_RA = " + usuario);
+							.executeQuery("SELECT funcionaro_nome, funcionario_senha FROM student WHERE funcionario_id = " + usuario);
 
 					if (!rs.next()) {
 						// Se o usuário não existir, avise ao usuário
@@ -124,16 +124,16 @@ public class LoginFrame extends JFrame {
 						String senha = new String(enteredPassword);
 
 						// Verifica se a senha está correta
-						String senhaDoBanco = rs.getString("aluno_senha");
+						String senhaDoBanco = rs.getString("funcionario_senha");
 						if (!senha.equals(senhaDoBanco)) {
 							// Se a senha estiver incorreta, avise ao usuário
 							JOptionPane.showMessageDialog(null, "Senha incorreta!");
 						} else {
 							// Se o usuário e a senha estiverem corretos, loga e mostra o nome do aluno
-							String nomeDoAluno = rs.getString("aluno_nome");
-							JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeDoAluno);
+							String nomeDoFuncionario = rs.getString("funcionario_nome");
+							JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeDoFuncionario);
 							this.dispose();
-							PedidosFrame.executar(usuario); // LEVAR PARA A OUTRA TELA
+							AdminFrame.executar(usuario); // LEVAR PARA A OUTRA TELA
 						}
 					}
 				} catch (SQLException ex) {
@@ -151,7 +151,7 @@ public class LoginFrame extends JFrame {
 		});
 		
 		btnCadastrar.addActionListener(e -> {
-			CadastroFrame.main(null);
+			CadastroFuncionarioFrame.main(null);
 		});
 		
 		JMenuBar menuBar = new JMenuBar();
@@ -159,9 +159,14 @@ public class LoginFrame extends JFrame {
 
         JMenu menuOpcoes = new JMenu("Opções");
         menuBar.add(menuOpcoes);
-           
-        JMenuItem buttonFuncionarios = new JMenuItem("Funcionários");
-        menuOpcoes.add(buttonFuncionarios);
+        
+        JMenuItem buttonAlunos = new JMenuItem("Alunos");
+        menuOpcoes.add(buttonAlunos);
+        
+        buttonAlunos.addActionListener(e -> {
+        	FuncionariosFrame.main(null);
+        	dispose();
+        });
         
         JMenuItem menuItemSair = new JMenuItem("Sair");
         menuOpcoes.add(menuItemSair);
