@@ -2,18 +2,14 @@ package com.helder.cantina;
 
 public class Funcionario extends Usuario {
 
-    private String usuarioCargo;
-
-    public Funcionario(int usuarioId, String usuarioNome, String usuarioSenha, String usuarioCargo){
+    public Funcionario(int usuarioId, String usuarioNome, String usuarioSenha){
         super(usuarioId, usuarioNome, usuarioSenha);
-        this.usuarioCargo = usuarioCargo;
     }
-
-    public String getUsuarioCargo() {
-        return usuarioCargo;
-    }
-
-    public void setUsuarioCargo(String usuarioCargo) {
-        this.usuarioCargo = usuarioCargo;
-    }
+    
+    @Override
+	public void criarUsuario() {
+		Database.sqlCreate("INSERT INTO student VALUES (" + super.getUsuarioId() + ", '" + super.getUsuarioNome() + "', '"
+				+ super.getUsuarioSenha() + "')");
+	}
+    
 }
