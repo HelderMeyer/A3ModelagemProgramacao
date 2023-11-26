@@ -162,6 +162,10 @@ public class LoginFrame extends JFrame {
            
         JMenuItem buttonFuncionarios = new JMenuItem("Funcionários");
         menuOpcoes.add(buttonFuncionarios);
+        buttonFuncionarios.addActionListener(e -> {
+            FuncionariosFrame.main(null);
+            dispose();
+        });
         
         JMenuItem menuItemSair = new JMenuItem("Sair");
         menuOpcoes.add(menuItemSair);

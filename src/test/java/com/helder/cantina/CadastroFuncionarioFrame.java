@@ -116,9 +116,9 @@ public class CadastroFuncionarioFrame extends JFrame {
                     JOptionPane.showMessageDialog(null, "Esse funcionário já foi cadastrado!");
                 } else {
                     // O usuário não existe, então podemos cadastrar
-                	//Aluno aluno = new Aluno(usuario, nome, senha, curso, 0);
-                    //aluno.criarUsuario();
-                    JOptionPane.showMessageDialog(null, "Funcionário " + Aluno.getAlunoNameByRA(usuario) + " cadastrado com sucesso!");
+                	Funcionario funcionario = new Funcionario(usuario, nome, senha);
+                	funcionario.criarUsuario();
+                    JOptionPane.showMessageDialog(null, "Funcionário " + Funcionario.getFuncionarioNameById(usuario) + " cadastrado com sucesso!");
                     dispose();
                 }
             }

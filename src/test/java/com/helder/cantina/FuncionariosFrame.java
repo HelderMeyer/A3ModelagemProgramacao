@@ -113,7 +113,7 @@ public class FuncionariosFrame extends JFrame {
 
 					// Consulta se o usuário existe no banco de dados
 					ResultSet rs = statement
-							.executeQuery("SELECT funcionaro_nome, funcionario_senha FROM student WHERE funcionario_id = " + usuario);
+							.executeQuery("SELECT funcionario_nome, funcionario_senha FROM funcionario WHERE funcionario_id = " + usuario);
 
 					if (!rs.next()) {
 						// Se o usuário não existir, avise ao usuário
@@ -164,7 +164,7 @@ public class FuncionariosFrame extends JFrame {
         menuOpcoes.add(buttonAlunos);
         
         buttonAlunos.addActionListener(e -> {
-        	FuncionariosFrame.main(null);
+        	LoginFrame.main(null);
         	dispose();
         });
         

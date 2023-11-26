@@ -8,8 +8,14 @@ public class Funcionario extends Usuario {
     
     @Override
 	public void criarUsuario() {
-		Database.sqlCreate("INSERT INTO student VALUES (" + super.getUsuarioId() + ", '" + super.getUsuarioNome() + "', '"
+		Database.sqlCreate("INSERT INTO funcionario VALUES (" + super.getUsuarioId() + ", '" + super.getUsuarioNome() + "', '"
 				+ super.getUsuarioSenha() + "')");
+	}
+    
+    public static String getFuncionarioNameById(int usuario) {
+		String resultado = null;
+		resultado = Database.sqlRead("SELECT * FROM funcionario WHERE funcionario_id = " + usuario, "funcionario_nome");
+		return resultado;
 	}
     
 }

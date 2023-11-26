@@ -68,13 +68,15 @@ public class NewPedidosFrame extends JFrame {
     }
     
     private void updateDatabase(DefaultTableModel tableModel) {
+    	String quantidadeStringPedido = Database.sqlRead("SELECT MAX(ped_ID) as max_ped_ID FROM pedido;", "max_ped_ID");
+    	int quantidadePedidos = Integer.parseInt(quantidadeStringPedido);
+    	quantidadePedidos += 1;
+
+    	String quantidadeStringPedLan = Database.sqlRead("SELECT MAX(pedlan_ID) as max_pedlan_ID FROM pedido_lanche;", "max_pedlan_ID");
+    	int quantidadePedLan = Integer.parseInt(quantidadeStringPedLan);
+    	quantidadePedLan += 1;
+    	quantidadePedLan += 1;
         int rowCount = tableModel.getRowCount();
-        String quantidadeString = Database.sqlRead("select count(ped_ID) as qtd from pedido;", "qtd");
-        int quantidadePedidos = Integer.parseInt(quantidadeString);
-        quantidadePedidos += 1;
-        String quantidadePedLanString = Database.sqlRead("select count(pedlan_ID) as qtd from pedido_lanche;", "qtd");
-        int quantidadePedLan = Integer.parseInt(quantidadePedLanString);
-        quantidadePedLan += 1;
         Database.sqlCreate("INSERT INTO pedido (ped_ID, ped_alu_RA, ped_can_cnpj) VALUES ("+ (quantidadePedidos) + "," + userId + ",'" + Cantina.getCnpj()+"');");
         //System.out.println(quantidadePedidos);
         for (int i = 0; i < rowCount; i++) {
