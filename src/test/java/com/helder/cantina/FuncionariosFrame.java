@@ -133,7 +133,7 @@ public class FuncionariosFrame extends JFrame {
 							String nomeDoFuncionario = rs.getString("funcionario_nome");
 							JOptionPane.showMessageDialog(null, "Bem-vindo, " + nomeDoFuncionario);
 							this.dispose();
-							AdminFrame.executar(usuario); // LEVAR PARA A OUTRA TELA
+							MenuFuncionariosFrame.executar(usuario); // LEVAR PARA A OUTRA TELA
 						}
 					}
 				} catch (SQLException ex) {
