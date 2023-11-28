@@ -191,41 +191,58 @@ public class AdminFrame extends JFrame {
 		contentPane.add(scrollPane);
 
 		btnAdicionar.addActionListener(e -> {
-			String id = txtIdProduto.getText();
-			String nome = txtNome.getText();
-			String valorStr = txtValor.getText();
-			String descricao = txtDescricao.getText();
+		    String id = txtIdProduto.getText();
+		    String nome = txtNome.getText();
+		    String valorStr = txtValor.getText();
+		    String descricao = txtDescricao.getText();
 
-			// Verifica se todos os campos estão preenchidos
-			if (!id.isEmpty() && !nome.isEmpty() && !valorStr.isEmpty() && !descricao.isEmpty()) {
-				try {
-					int lanID = Integer.parseInt(id);
-					double valor = Double.parseDouble(valorStr);
+		    // Verifica se todos os campos estão preenchidos
+		    if (!id.isEmpty() && !nome.isEmpty() && !valorStr.isEmpty() && !descricao.isEmpty()) {
+		        try {
+		            int lanID = Integer.parseInt(id);
 
-					// Verifica se o lan_ID já existe no banco de dados
-					boolean idExists = checkIfIDExists(lanID);
+		            // Verifica se o lan_ID é um número inteiro positivo
+		            if (lanID > 0) {
+		                // Verifica se o valor é um número inteiro positivo e não contém ponto ou vírgula
+		                if (!valorStr.contains(".") && !valorStr.contains(",")) {
+		                    double valor = Double.parseDouble(valorStr);
 
-					if (!idExists) {
-						// Se o lan_ID não existir, insere o novo item no banco de dados
-						String insertQuery = ("INSERT INTO lanche (lan_ID, lan_nome, lan_valor, lan_descricao) VALUES ("
-								+ lanID + ", '" + nome + "', " + valor + ", '" + descricao + "')");
-						Database.sqlCreate(insertQuery);
-						atualizarTabela();
-						// Limpa os campos de entrada após adicionar um novo item
-						txtIdProduto.setText("");
-						txtNome.setText("");
-						txtValor.setText("");
-						txtDescricao.setText("");
-					} else {
-						JOptionPane.showMessageDialog(null, "O lan_ID = " + id + " já existe no banco de dados.");
-					}
-				} catch (NumberFormatException ex) {
-					JOptionPane.showMessageDialog(null,
-							"Por favor, insira um lan_ID numérico válido e um valor numérico válido.");
-				}
-			} else {
-				JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
-			}
+		                    // Verifica se o valor é um número inteiro positivo
+		                    if (valor == Math.floor(valor) && !Double.isInfinite(valor)) {
+		                        // Verifica se o lan_ID já existe no banco de dados
+		                        boolean idExists = checkIfIDExists(lanID);
+
+		                        if (!idExists) {
+		                            //
+		                            /*String insertQuery = ("INSERT INTO lanche (lan_ID, lan_nome, lan_valor, lan_descricao) VALUES ("
+		                                    + lanID + ", '" + nome + "', " + valor + ", '" + descricao + "')");*/
+		                            //Database.sqlCreate(insertQuery);
+		                            Lanche lanche = new Lanche(lanID,nome,valor,descricao);
+		                            lanche.criarLanche();
+		                            atualizarTabela();
+		                            // Limpa os campos de entrada após adicionar um novo item
+		                            txtIdProduto.setText("");
+		                            txtNome.setText("");
+		                            txtValor.setText("");
+		                            txtDescricao.setText("");
+		                        } else {
+		                            JOptionPane.showMessageDialog(null, "O lan_ID = " + id + " já existe no banco de dados.");
+		                        }
+		                    } else {
+		                        JOptionPane.showMessageDialog(null, "O valor do lanche deve ser um número inteiro positivo.");
+		                    }
+		                } else {
+		                    JOptionPane.showMessageDialog(null, "O valor do lanche não pode conter '.' ou ','.");
+		                }
+		            } else {
+		                JOptionPane.showMessageDialog(null, "O lan_ID deve ser um número inteiro positivo.");
+		            }
+		        } catch (NumberFormatException ex) {
+		            JOptionPane.showMessageDialog(null, "Por favor, insira um lan_ID numérico válido e um valor numérico válido.");
+		        }
+		    } else {
+		        JOptionPane.showMessageDialog(null, "Por favor, preencha todos os campos.");
+		    }
 		});
 
 		btnEditar.addActionListener(e -> {

@@ -1,6 +1,6 @@
 package com.helder.cantina;
 
-public abstract class Lanche {
+public class Lanche {
     
     private int ID;
     private String nome;
@@ -44,6 +44,11 @@ public abstract class Lanche {
 
 	public void setDescricao(String descricao) {
 		this.descricao = descricao;
+	}
+	
+	public void criarLanche() {
+		Database.sqlCreate("INSERT INTO lanche VALUES (" + this.getID() + ", '" + this.getNome() + "', "
+				+ this.getValor() + ", '" + this.getDescricao() + "')");
 	}
 
 }

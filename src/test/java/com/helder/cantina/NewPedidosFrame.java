@@ -2,6 +2,12 @@ package com.helder.cantina;
 
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
@@ -34,19 +40,47 @@ public class NewPedidosFrame extends JFrame {
     }
     
     private void preencherComboBox(JComboBox<String> comboBox) {
+        // Limpa o JComboBox antes de adicionar novos itens
+        comboBox.removeAllItems();
+
         // Lógica para preencher o JComboBox com os itens do banco de dados
         // Você precisará acessar o banco, executar uma consulta SQL e obter os resultados
         // Adicione os resultados ao JComboBox
-        // Exemplo:
-        // comboBox.addItem("Item do banco 1");
-        // comboBox.addItem("Item do banco 2");
-        // ...
-    	String quantidadeString = Database.sqlRead("select count(*) as qtd from lanche", "qtd");
-    	int quantidadeLanches = Integer.parseInt(quantidadeString);
-    	for(int contador = 1; contador <= quantidadeLanches; contador++) {
-    		comboBox.addItem(Database.sqlRead("SELECT * FROM lanche WHERE lan_ID = " + contador, "lan_nome"));
-    	}
+
+        // Exemplo genérico de como preencher o JComboBox com os IDs dos lanches
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+
+        try {
+            // Conexão com o banco de dados
+            connection = DriverManager.getConnection("jdbc:sqlite:databasecantina.db");
+            statement = connection.createStatement();
+
+            // Consulta SQL para obter todos os IDs dos lanches
+            String query = "SELECT lan_nome FROM lanche";
+            resultSet = statement.executeQuery(query);
+
+            // Adiciona os IDs ao JComboBox
+            while (resultSet.next()) {
+                String id = resultSet.getString("lan_nome");
+                comboBox.addItem(id);
+            }
+        } catch (SQLException e) {
+            // Tratamento de exceção
+            e.printStackTrace();
+        } finally {
+            // Fechamento de recursos
+            try {
+                if (resultSet != null) resultSet.close();
+                if (statement != null) statement.close();
+                if (connection != null) connection.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
     }
+
     
     private void updateTotalValue(DefaultTableModel tableModel, JLabel lblTotal) {
         double total = 0.0;
@@ -70,12 +104,11 @@ public class NewPedidosFrame extends JFrame {
     private void updateDatabase(DefaultTableModel tableModel) {
     	String quantidadeStringPedido = Database.sqlRead("SELECT MAX(ped_ID) as max_ped_ID FROM pedido;", "max_ped_ID");
     	int quantidadePedidos = Integer.parseInt(quantidadeStringPedido);
-    	quantidadePedidos += 1;
+    		quantidadePedidos += 1;
 
     	String quantidadeStringPedLan = Database.sqlRead("SELECT MAX(pedlan_ID) as max_pedlan_ID FROM pedido_lanche;", "max_pedlan_ID");
     	int quantidadePedLan = Integer.parseInt(quantidadeStringPedLan);
-    	quantidadePedLan += 1;
-    	quantidadePedLan += 1;
+    	quantidadePedLan += 1; //tinha outro desse na linha de baixo. Se der ruim, você sabe que tem que devolver essa parte.
         int rowCount = tableModel.getRowCount();
         Database.sqlCreate("INSERT INTO pedido (ped_ID, ped_alu_RA, ped_can_cnpj) VALUES ("+ (quantidadePedidos) + "," + userId + ",'" + Cantina.getCnpj()+"');");
         //System.out.println(quantidadePedidos);
@@ -83,7 +116,8 @@ public class NewPedidosFrame extends JFrame {
             //String precoItem = tableModel.getValueAt(i, 1).toString(); // Preço do lanche está na coluna 1
             String itemName = tableModel.getValueAt(i, 0).toString(); // Nome do lanche está na coluna 0
             String query = "SELECT lan_ID FROM lanche WHERE lan_nome = '" + itemName + "'";
-            String idDoLanche = Database.sqlRead(query, "lan_ID");
+            String idDoLancheString = Database.sqlRead(query, "lan_ID");
+            int idDoLanche = Integer.parseInt(idDoLancheString);
             //Inserindo novo pedido para Mateus
             //INSERT INTO pedido (ped_ID, ped_alu_RA, ped_can_CNPJ)
             //VALUES (2, 1272117809, '40.368.914/0001-24');
@@ -94,8 +128,7 @@ public class NewPedidosFrame extends JFrame {
             
             
             //System.out.println(quantidadePedLan);
-            
-            Database.sqlCreate("INSERT INTO pedido_lanche (pedlan_ID, pedlan_ped_ID, pedlan_lan_ID) VALUES ("+(quantidadePedLan)+","+(quantidadePedidos)+","+idDoLanche+")");
+            Pedido.createPedido(quantidadePedLan, quantidadePedidos, idDoLanche);
             quantidadePedLan += 1;
         }
 
@@ -191,20 +224,26 @@ public class NewPedidosFrame extends JFrame {
         contentPane.setLayout(gl_contentPane);
         
         descriptionButton.addActionListener(e -> {
-            String selectedItem = (String) selectItem.getSelectedItem();
+            Object selectedItem = selectItem.getSelectedItem();
             if (selectedItem != null) {
-                // Lógica para exibir a descrição do item selecionado em um novo JFrame
-                // Exemplo:
-                // JFrame descricaoFrame = new JFrame();
-                // descricaoFrame.setTitle("Descrição do Item");
-                // JLabel descricaoLabel = new JLabel("Descrição: Detalhes do item selecionado");
-                // descricaoFrame.add(descricaoLabel);
-                // descricaoFrame.pack();
-                // descricaoFrame.setVisible(true);
+                String itemName = (String) selectedItem;
+                String query = "SELECT * FROM lanche WHERE lan_nome = '" + itemName + "'";
+                String idDoLanche = Database.sqlRead(query, "lan_ID");
+                String nomeDoLanche = Database.sqlRead(query, "lan_nome");
+                String valorDoLanche = "R$" + Database.sqlRead(query, "lan_valor");
+                String descricaoDoLanche = Database.sqlRead(query, "lan_descricao");
+                
+                String message = "ID do Lanche: " + idDoLanche + "\n" +
+                                 "Nome do Lanche: " + nomeDoLanche + "\n" +
+                                 "Valor do Lanche: " + valorDoLanche + "\n" +
+                                 "Descrição do Lanche: " + descricaoDoLanche;
+                
+                JOptionPane.showMessageDialog(null, message, "Detalhes do Lanche", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showMessageDialog(null, "Selecione um item antes de ver a descrição.");
+                JOptionPane.showMessageDialog(null, "Selecione um item antes de ver a descrição.", "Aviso", JOptionPane.WARNING_MESSAGE);
             }
         });
+
 
         
         addItemButton.addActionListener(e -> {
@@ -258,6 +297,19 @@ public class NewPedidosFrame extends JFrame {
                 JOptionPane.showMessageDialog(null, "Adicione itens à tabela antes de finalizar a compra.");
             }
         });
+        
+        JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu menuOpcoes = new JMenu("Opções");
+		menuBar.add(menuOpcoes);
+
+		JMenuItem menuItemSair = new JMenuItem("Voltar");
+		menuOpcoes.add(menuItemSair);
+		menuItemSair.addActionListener(e -> {
+			// Adicione aqui a lógica para sair do sistema
+			dispose();
+		});
 
 
     }

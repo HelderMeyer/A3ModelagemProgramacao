@@ -86,28 +86,9 @@ public class Pedido {
 		this.pedidoValor = pedidoValor;
 	}
 
-	public void createPedido() {
-		Database.sqlCreate("INSERT INTO pedido VALUES (" + this.getPedidoId() + "," + this.getPedidoPedidoLancheId()
-				+ "," + this.getPedidoAlunoRA() + "," + this.getPedidoCantinaCnpj() + ")");
-	}
-
-	public static String consultarPedidoID(int userId) {
-		String resultado = null;
-		Database.sqlRead("SELECT ped_ID FROM pedido WHERE ped_alu_RA" + userId, "");
-		return resultado;
-		
-	}
-
-	public static String consultarPedidoItens(String informacao) {
-		String resultado = null;
-		return resultado;
-		
-	}
-
-	public static String consultarPedidoPrecoTotal(String informacao) {
-		String resultado = null;
-		return resultado;
-		
+	public static void createPedido(int quantidadePedLan, int quantidadePedidos, int idDoLanche) {
+		Database.sqlCreate("INSERT INTO pedido_lanche (pedlan_ID, pedlan_ped_ID, pedlan_lan_ID) VALUES ("
+				+ quantidadePedLan + "," + quantidadePedidos + "," + idDoLanche + ")");
 	}
 
 }

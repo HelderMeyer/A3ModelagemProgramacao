@@ -125,6 +125,19 @@ public class CadastroFuncionarioFrame extends JFrame {
         });
 
 
+        JMenuBar menuBar = new JMenuBar();
+		setJMenuBar(menuBar);
+
+		JMenu menuOpcoes = new JMenu("Opções");
+		menuBar.add(menuOpcoes);
+
+		JMenuItem menuItemSair = new JMenuItem("Voltar");
+		menuOpcoes.add(menuItemSair);
+		menuItemSair.addActionListener(e -> {
+			// Adicione aqui a lógica para sair do sistema
+			dispose();
+		});
+        
         setLocationRelativeTo(null); // Centraliza a janela na tela
     }
 }
